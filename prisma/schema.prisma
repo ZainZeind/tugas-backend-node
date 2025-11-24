@@ -1,0 +1,34 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  // Pastikan XAMPP MySQL menyala.
+  // Format: mysql://USER:PASSWORD@HOST:PORT/DATABASE_NAME
+  // Default XAMPP user: root, pass: (kosong), port: 3306
+  url      = "mysql://root:@localhost:3306/inventory_express_db"
+}
+
+// Model Produk dengan kolom lengkap
+model Product {
+  id          Int      @id @default(autoincrement())
+  uuid        String   @unique @default(uuid()) // UUID untuk keamanan URL
+  name        String
+  category    String
+  price       Decimal  @db.Decimal(10, 2)
+  stock       Int
+  description String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("products")
+}
+```
+
+**Setelah menyimpan file di atas, jalankan perintah ini di terminal untuk membuat tabel di MySQL XAMPP:**
+```bash
+npx prisma db push
